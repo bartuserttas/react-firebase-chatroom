@@ -9,6 +9,8 @@ import 'firebase/analytics';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
+import logo from './assets/logo.png';
+
 firebase.initializeApp({
   apiKey: 'AIzaSyBVC09Pq8VSNBatuIwz_bc9ZWMCw6gbP8E',
   authDomain: 'react-messaging-app-cs411.firebaseapp.com',
@@ -77,31 +79,7 @@ function App() {
               d="M8,37l26.666-25.713c0.559-0.539,1.492-0.221,1.606,0.547L40,37l-15,8.743 c-0.609,0.342-1.352,0.342-1.961,0L8,37z"
             ></path>
           </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            x="0px"
-            y="0px"
-            width="40"
-            height="40"
-            viewBox="0 0 40 40"
-          >
-            <g
-              transform="translate(0.000000,40.000000) scale(0.100000,-0.100000)"
-              fill="#ff6f00"
-              stroke="none"
-            >
-              <path
-                d="M53 336 c-33 -33 -33 -34 -33 -133 0 -106 7 -123 48 -123 17 0 22 -4
-18 -15 -3 -8 -9 -21 -12 -29 -9 -23 44 -7 65 20 17 22 27 24 97 24 76 0 80 1
-112 34 32 33 32 34 32 133 0 64 -4 103 -12 111 -8 8 -55 12 -148 12 l-135 0
--32 -34z m312 -90 c0 -71 -4 -101 -12 -103 -10 -4 -13 17 -13 79 0 52 -5 89
--12 96 -8 8 -53 12 -136 12 -82 0 -121 3 -117 10 4 7 59 10 148 8 l142 -3 0
--99z m-40 -41 l0 -100 -87 -3 c-79 -3 -88 -5 -102 -27 -21 -32 -36 -32 -36 -1
-0 21 -6 25 -32 28 l-33 3 -3 89 c-2 49 0 96 2 103 4 11 35 13 148 11 l143 -3
-0 -100z"
-              />
-            </g>
-          </svg>
+          <img className="logo" src={logo} />
         </h1>
         <SignOut />
       </header>
@@ -156,6 +134,7 @@ function ChatRoom() {
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid,
       photoURL,
+      userName: auth.currentUser.providerData[0].displayName,
     });
 
     setFormValue('');
@@ -187,15 +166,31 @@ function ChatRoom() {
 }
 
 function ChatMessage(props) {
-  const { text, uid, photoURL } = props.message;
+  const { text, uid, userName, photoURL } = props.message;
 
   const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
 
   return (
     <>
-      <div className={`message ${messageClass}`}>
-        <img src={photoURL} />
-        <p>{text}</p>
+      <div>
+        <div
+          className={messageClass === 'sent' ? `senderName` : `recieverName`}
+        >
+          <div
+            className="messageUserName"
+            style={{
+              display: 'flex',
+              justifyContent:
+                messageClass === 'sent' ? 'flex-end' : 'flex-start',
+            }}
+          >
+            {userName}
+          </div>
+          <div className={`message ${messageClass}`}>
+            <img className="profile_img" src={photoURL} />
+            <p>{text}</p>
+          </div>
+        </div>
       </div>
     </>
   );
