@@ -100,7 +100,7 @@ function SignIn() {
       <button className="sign-in" onClick={signInWithGoogle}>
         Sign in with Google
       </button>
-      <p>Please Sign In.</p>
+      <p style={{ color: 'white' }}>Please Sign In.</p>
     </>
   );
 }
@@ -166,7 +166,7 @@ function ChatRoom() {
 }
 
 function ChatMessage(props) {
-  const { text, uid, userName, photoURL } = props.message;
+  const { photoURL, text, uid, userName } = props.message;
 
   const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
 
@@ -187,7 +187,7 @@ function ChatMessage(props) {
             {userName}
           </div>
           <div className={`message ${messageClass}`}>
-            <img className="profile_img" src={photoURL} />
+            <img className="profile_img" src={props.message.photoURL} />
             <p>{text}</p>
           </div>
         </div>
